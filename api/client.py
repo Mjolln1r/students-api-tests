@@ -4,7 +4,7 @@ import requests
 import config
 import allure
 
-log = logging.getLogger("student_api")
+log = logging.getLogger(config.LOGGER_NAME)
 
 
 class ApiClient:
