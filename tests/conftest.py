@@ -4,7 +4,7 @@ from api.client import ApiClient
 from utils.data import build_student
 import allure
 from utils.logger import start_test_log, stop_test_log
-from utils.wait import wait_for_status
+from utils.wait import wait_until
 
 
 @pytest.fixture(autouse=True)
@@ -24,9 +24,12 @@ def students_api():
 
 @pytest.fixture
 def created_student(students_api):
-    """Создаёт студента перед тестом, ждет его появления и удаляет после."""
     response = students_api.create_student(build_student())
     student = response.json()["student"]
-    wait_for_status(students_api, student["id"], expected_status=1)
+    found = wait_until(
+        lambda: students_api.get_student_by_id(student["id"]),
+        lambda r: r.json()["status"] == 1,
+    )
+    assert found.json()["status"] == 1, "Студент не появился после создания"
     yield student
     students_api.delete_student(student["id"])

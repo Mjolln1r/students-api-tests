@@ -1,8 +1,8 @@
-import time
 import pytest
 import allure
 from utils.check_schema import check_student_schema
-from utils.wait import wait_for_status
+from utils.wait import wait_until
+from utils.data import build_student
 
 
 @allure.feature("Студенты")
@@ -19,16 +19,24 @@ class TestGetStudents:
             check_student_schema(student)
 
 
-    @pytest.mark.xfail(
-        reason="Баг API: GET по ID нестабилен из-за кэша/балансировщика. Возвращает status:0 для только что созданных студентов.")
     @allure.title("GET student/{id}: студент по существующему id")
     def test_get_student_by_id(self, students_api, created_student):
-        student_id = created_student["id"]
-        is_found = wait_for_status(students_api, student_id, expected_status=1)
-        assert is_found, f"Сервер не отдает студента {student_id}"
-        response = students_api.get_student_by_id(student_id)
+        sid = created_student["id"]
+        response = wait_until(
+            lambda: students_api.get_student_by_id(sid),
+            lambda r: r.json()["status"] == 1,
+        )
         assert response.status_code == 200
         payload = response.json()
         assert payload["status"] == 1
         check_student_schema(payload["student"])
         assert payload["student"] == created_student
+
+    @pytest.mark.xfail(reason="BUG-001: GET /student/{id} нестабилен после создания", strict=False)
+    def test_get_student_is_consistent(students_api):
+        student = students_api.create_student(build_student()).json()["student"]
+        try:
+            statuses = [students_api.get_student_by_id(student["id"]).json()["status"] for _ in range(10)]
+            assert statuses == [1] * 10, f"Нестабильные ответы: {statuses}"
+        finally:
+            students_api.delete_student(student["id"])

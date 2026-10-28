@@ -18,7 +18,7 @@ class StudentsApi:
         return self.client.request(method="POST", path="/student", json=payload)
 
 
-    def update_student(self, payload, student_id):
+    def update_student(self, student_id, payload):
         return self.client.request(method="PUT", path=f"/student/{student_id}", json=payload)
 
 

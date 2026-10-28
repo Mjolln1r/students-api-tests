@@ -1,13 +1,12 @@
 import time
 
-def wait_for_status(api, student_id, expected_status, timeout=5):
-    start = time.time()
-    while time.time() - start < timeout:
-        try:
-            res = api.get_student_by_id(student_id)
-            if res.json().get("status") == expected_status:
-                return True
-        except Exception:
-            pass
-        time.sleep(0.5)
-    return False
+
+def wait_until(func, check, timeout=10, interval=0.5):
+    """Повторять func(), пока check(результат) не станет True, но не дольше timeout секунд.
+    Возвращает последний ответ."""
+    deadline = time.time() + timeout
+    result = func()
+    while not check(result) and time.time() < deadline:
+        time.sleep(interval)
+        result = func()
+    return result
