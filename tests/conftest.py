@@ -33,3 +33,19 @@ def created_student(students_api):
     assert found.json()["status"] == 1, "Студент не появился после создания"
     yield student
     students_api.delete_student(student["id"])
+
+
+@pytest.fixture
+def create_student(students_api):
+    ids = []
+
+    def _create(payload):
+        response = students_api.create_student(payload)
+        student = response.json().get("student")
+        if student:
+            ids.append(student["id"])
+        return response
+
+    yield _create
+    for sid in ids:
+        students_api.delete_student(sid)

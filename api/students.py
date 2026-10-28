@@ -5,22 +5,17 @@ class StudentsApi:
     def __init__(self, client: ApiClient):
         self.client = client
 
-
     def get_students(self):
         return self.client.request(method="GET", path="/student")
-
 
     def get_student_by_id(self, student_id):
         return self.client.request(method="GET", path=f"/student/{student_id}")
 
-
-    def create_student(self, payload):
-        return self.client.request(method="POST", path="/student", json=payload)
-
+    def create_student(self, payload=None, **kwargs):
+        return self.client.request(method="POST", path="/student", json=payload, **kwargs)
 
     def update_student(self, student_id, payload):
         return self.client.request(method="PUT", path=f"/student/{student_id}", json=payload)
-
 
     def delete_student(self, student_id):
         return self.client.request(method="DELETE", path=f"/student/{student_id}")
