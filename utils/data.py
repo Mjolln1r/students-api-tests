@@ -1,14 +1,13 @@
 import uuid
 
 
-def build_student(**overrides):
-    """Валидное тело для POST /student. Любое поле можно переопределить."""
-    payload = {
-        "name": "Ivan Ivanov",
-        "email": f"qa_{uuid.uuid4().hex[:10]}@example.com",
-        "phone_no": "+7" + str(uuid.uuid4().int)[:10],
+def build_student():
+    unique_suffix = uuid.uuid4().hex[:8]
+
+    return {
+        "name": f"Test_Student_{unique_suffix}",
+        "email": f"qa_{unique_suffix}@example.com",
+        "phone_no": f"+7{unique_suffix[:10]}",
         "gender": "male",
-        "status": 1,
+        "status": 1
     }
-    payload.update(overrides)
-    return payload
