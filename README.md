@@ -1,3 +1,4 @@
+[![API tests](https://github.com/Mjolln1r/students-api-tests/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Mjolln1r/students-api-tests/actions/workflows/tests.yml)
 # Students API: автотесты
 
 Автотесты для блока «students» (GET, POST, PUT, DELETE) по описанию из Swagger: `http://194.87.126.16/apidocs`.
