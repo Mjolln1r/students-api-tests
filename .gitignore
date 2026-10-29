@@ -4,6 +4,7 @@ __pycache__/
 allure-results/
 allure-report/
 logs/
+.git/
+.github/
 .idea/
 .DS_Store
-*.pyc

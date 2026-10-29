@@ -55,6 +55,24 @@ BASE_URL=http://localhost:8000 TIMEOUT=15 pytest
 - `allure-results/`: результаты для Allure (шаги, вложения запросов и ответов, лог теста);
 - `logs/`: лог каждого теста отдельным файлом.
 
+## Запуск в Docker
+
+```bash
+docker build -t students-api-tests .
+
+mkdir -p docker-out/logs
+docker run --rm \
+  -v "$PWD/docker-out:/out" \
+  -v "$PWD/docker-out/logs:/app/logs" \
+  students-api-tests pytest --alluredir=/out/allure-results
+```
+
+Результаты Allure появятся в `docker-out/allure-results`, логи в `docker-out/logs`. Отчёт: `allure serve docker-out/allure-results`.
+
+Адрес API можно сменить: добавьте в `docker run` параметр `-e BASE_URL=http://host:port`.
+
+Код возврата контейнера ненулевой, если есть красные тесты (это известные баги, см. [bugs.md](bugs.md)).
+
 ## Allure-отчёт
 
 Нужен [Allure Commandline](https://allurereport.org/docs/install/) (на macOS: `brew install allure`).
