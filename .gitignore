@@ -2,4 +2,8 @@
 __pycache__/
 .pytest_cache/
 allure-results/
+allure-report/
 logs/
+.idea/
+.DS_Store
+*.pyc
