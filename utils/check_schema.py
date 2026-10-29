@@ -2,6 +2,7 @@ import allure
 
 STUDENT_FIELDS = {"id", "name", "email", "phone_no", "gender", "status"}
 
+
 def check_student_schema(student):
     with allure.step("Проверка структуры и типов данных полей"):
         missing = STUDENT_FIELDS - set(student)
