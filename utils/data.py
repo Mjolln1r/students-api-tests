@@ -11,3 +11,14 @@ def build_student(**overrides):
     }
     payload.update(overrides)
     return payload
+
+
+def build_update(**overrides):
+    payload = {
+        "name": "Updated Name",
+        "email": f"upd_{uuid.uuid4().hex[:10]}@example.com",
+        "gender": "female",
+        "status": 0,
+    }
+    payload.update(overrides)
+    return payload

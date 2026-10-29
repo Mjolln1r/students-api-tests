@@ -1,6 +1,5 @@
 import allure
 import pytest
-
 from utils.check_schema import check_student_schema
 from utils.checks import check_status_code, check_body_status, check_message, check_student_fields, \
     check_message_contains
